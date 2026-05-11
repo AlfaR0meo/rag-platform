@@ -1,0 +1,83 @@
+version: "3.9"
+
+services:
+  # Define the API service
+  api:
+    # Use the Dockerfile in the current directory to build the API image
+    build: .
+
+    # Name the API container for easier reference
+    container_name: rag_api
+    
+    # Expose port 8000 for the API
+    ports:
+      - "8000:8000"
+    
+    # Mount the current directory to /app in the container
+    volumes:
+      - .:/app
+
+    # Load environment variables from the .env file
+    env_file:
+      - .env
+
+    # Ensure that the API service starts after the database and vector store are ready
+    depends_on:
+      - postgres
+      - qdrant
+
+    # Use a command that waits for the dependencies to be ready before starting the API
+    command: >
+      sh -c "
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8000
+      --reload
+      "
+
+  # Define the PostgreSQL database service
+  postgres:
+    # Use the official PostgreSQL image from Docker Hub
+    image: postgres:16
+
+    # Name the PostgreSQL container for easier reference
+    container_name: rag_postgres
+
+    # Always restart the PostgreSQL container if it stops or crashes
+    restart: always
+
+    # Set environment variables for PostgreSQL to create a user, password, and database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: rag_db
+    
+    # Expose port 5432 for PostgreSQL
+    ports:
+      - "5432:5432"
+
+    # Mount a named volume to persist PostgreSQL data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Define the Qdrant vector store service
+  qdrant:
+    # Use the official Qdrant image from Docker Hub
+    image: qdrant/qdrant
+
+    # Name the Qdrant container for easier reference
+    container_name: rag_qdrant
+
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+
+    # Mount a named volume to persist Qdrant data
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+# Define named volumes for data persistence
+volumes:
+  # These volumes will persist data for PostgreSQL and Qdrant even if the containers are removed
+  postgres_data:
+  qdrant_data:

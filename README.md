@@ -1,0 +1,1 @@
+# Multi-user RAG API platform with FastAPI + Qdrant + PostgreSQL + OpenRouter
