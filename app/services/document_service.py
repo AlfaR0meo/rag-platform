@@ -8,6 +8,8 @@ from sqlalchemy.orm import Session
 from app.models.document import Document
 from app.models.user import User
 
+from app.services.document_processing_service import DocumentProcessingService
+
 from app.core.constants import ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE
 
 # Папка для хранения загруженных файлов
@@ -18,7 +20,7 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 # Сервис для работы с документами
 class DocumentService:
     
-    # Сохранение документа
+    # Загрузка и сохранение документа
     @staticmethod
     def save_document(
         db: Session, 
@@ -54,10 +56,7 @@ class DocumentService:
         file_path = UPLOAD_DIR / unique_filename
 
         with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(
-                file.file,
-                buffer,
-            )
+            shutil.copyfileobj(file.file, buffer)
 
         document = Document(
             filename=file.filename,
@@ -69,6 +68,11 @@ class DocumentService:
         db.add(document)
         db.commit()
         db.refresh(document)
+
+        DocumentProcessingService.process_document(
+            db=db,
+            document=document
+        )
 
         return document
 

@@ -27,3 +27,9 @@ ruff
 mypy
 
 email-validator
+
+pypdf==5.4.0
+
+sentence-transformers==4.1.0
+
+qdrant-client==1.14.2
