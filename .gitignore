@@ -46,3 +46,5 @@ qdrant_data/
 
 # Alembic
 alembic/versions/*.pyc
+
+uploads/
