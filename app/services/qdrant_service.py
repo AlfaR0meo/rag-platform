@@ -1,6 +1,12 @@
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, PointStruct, VectorParams
-
+from qdrant_client.models import (
+    Distance,
+    PointStruct,
+    VectorParams,
+    FieldCondition,
+    Filter,
+    MatchValue,
+)
 from app.core.config import settings
 
 # Сервис для взаимодействия с Qdrant, который будет использоваться для создания коллекции и индексирования векторов
@@ -61,3 +67,30 @@ class QdrantService:
                 )
             ],
         )
+
+    # Метод для выполнения поиска в Qdrant по эмбеддингу запроса. Он принимает эмбеддинг запроса, список идентификаторов документов, которые нужно учитывать при поиске, и количество результатов, которые нужно вернуть. Метод выполняет поиск в коллекции Qdrant, используя косинусное расстояние для оценки сходства между эмбеддингами, и возвращает наиболее релевантные результаты
+    @classmethod
+    def search(
+        cls,
+        query_embedding: list[float],
+        document_ids: list[int],
+        limit: int = 5,
+    ):
+        # Выполняем поиск в коллекции Qdrant, используя эмбеддинг запроса и фильтруя результаты по идентификаторам документов. Результаты сортируются по релевантности, и возвращается указанное количество наиболее релевантных результатов
+        results = cls.client.search(
+            collection_name=cls.COLLECTION_NAME,
+            query_vector=query_embedding,
+            limit=limit,
+            # Фильтр для ограничения поиска только теми точками, которые принадлежат указанным документам. Это позволяет сузить результаты поиска и повысить релевантность возвращаемых данныхs
+            query_filter=Filter(
+                should=[
+                    FieldCondition(
+                        key="document_id",
+                        match=MatchValue(value=document_id),
+                    )
+                    for document_id in document_ids
+                ]
+            )
+        )
+
+        return results
