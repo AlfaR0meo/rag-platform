@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     QDRANT_PORT: int
 
     OPENROUTER_API_KEY: str
+    OPENROUTER_MODEL: str
 
     model_config = SettingsConfigDict(
         env_file=".env",
