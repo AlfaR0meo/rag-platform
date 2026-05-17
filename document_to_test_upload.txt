@@ -1,0 +1,31 @@
+FastAPI is a modern and high-performance Python web framework for building APIs.
+
+FastAPI supports automatic OpenAPI documentation generation and integrates well with Pydantic for data validation.
+
+JWT authentication is commonly used in FastAPI applications to secure protected routes.
+
+PostgreSQL is a reliable relational database often used together with SQLAlchemy ORM.
+
+Docker helps developers containerize applications and simplify deployment workflows.
+
+Qdrant is a vector database designed for semantic search and AI applications.
+
+Embeddings convert text into numerical vectors that can be compared using cosine similarity.
+
+Semantic search allows users to find relevant information based on meaning instead of exact keyword matching.
+
+RAG stands for Retrieval-Augmented Generation and combines vector search with large language models.
+
+Sentence Transformers provide lightweight embedding models for semantic similarity tasks.
+
+Chunking is an important part of RAG pipelines because large documents must be split into smaller semantic pieces.
+
+Overlap between chunks helps preserve context continuity during retrieval.
+
+OpenRouter provides access to multiple LLM providers through a unified API.
+
+Vector databases store embeddings and enable fast nearest-neighbor search operations.
+
+Cosine similarity is one of the most popular distance metrics for comparing embedding vectors.
+
+Python developers often use FastAPI, Docker, PostgreSQL, and Qdrant together to build AI-powered backend systems.
