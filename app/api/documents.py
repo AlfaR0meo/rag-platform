@@ -11,11 +11,12 @@ from app.services.document_service import DocumentService
 router = APIRouter(prefix="/documents", tags=["Documents"])
 
 
+# Эндпоинт для загрузки документа
 @router.post("/upload", response_model=DocumentResponse)
 def upload_document(
     file: UploadFile = File(...), 
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     return DocumentService.save_document(
         db=db,
@@ -23,6 +24,7 @@ def upload_document(
         current_user=current_user,
     )
 
+# Эндпоинт для получения списка документов пользователя
 @router.get("/", response_model=list[DocumentResponse])
 def get_documents(
     db: Session = Depends(get_db),
@@ -30,5 +32,18 @@ def get_documents(
 ):
     return DocumentService.get_user_documents(
         db=db,
+        current_user=current_user,
+    )
+
+# Эндпоинт для удаления документа
+@router.delete("/{document_id}")
+def delete_document(
+    document_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return DocumentService.delete_document(
+        db=db,
+        document_id=document_id,
         current_user=current_user,
     )

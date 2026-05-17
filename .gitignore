@@ -35,6 +35,7 @@ htmlcov/
 Thumbs.db
 
 # Logs
+logs/
 *.log
 
 # Docker volumes / local data

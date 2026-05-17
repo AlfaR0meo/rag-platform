@@ -10,6 +10,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
+# Эндпоинт для регистрации нового пользователя
 @router.post("/register")
 def register(user_data: UserRegister, db: Session = Depends(get_db)):
     try:
@@ -29,6 +30,7 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
             detail=str(e),
         )
 
+# Эндпоинт для аутентификации пользователя и получения токена
 @router.post("/login", response_model=TokenResponse)
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),

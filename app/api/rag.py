@@ -11,6 +11,7 @@ from app.services.rag_service import RAGService
 router = APIRouter(prefix="/rag", tags=["RAG"])
 
 
+# Эндпоинт для обработки вопроса и генерации ответа
 @router.post("/")
 async def ask_question(
     request: RAGRequest,

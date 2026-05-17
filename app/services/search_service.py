@@ -2,13 +2,18 @@ from sqlalchemy.orm import Session
 
 from app.models.document import Document
 from app.models.user import User
+
 from app.services.embedding_service import EmbeddingService
 from app.services.qdrant_service import QdrantService
+
+from app.core.decorators import log_execution
 
 # Сервис для выполнения семантического поиска по документам пользователя
 class SearchService:
 
+    # Метод для выполнения семантического поиска по документам конкретного пользователя с помощью Qdrant
     @staticmethod
+    @log_execution("semantic_search")
     def semantic_search(
         db: Session,
         query: str,

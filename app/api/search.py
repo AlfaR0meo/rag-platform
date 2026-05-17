@@ -11,6 +11,7 @@ from app.services.search_service import SearchService
 router = APIRouter(prefix="/search",tags=["Search"])
 
 
+# Эндпоинт для семантического поиска
 @router.post("/")
 def semantic_search(
     request: SearchRequest,

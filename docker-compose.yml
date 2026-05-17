@@ -9,9 +9,9 @@ services:
     # Name the API container for easier reference
     container_name: rag_api
     
-    # Expose port 8000 for the API
+    # Expose port 8080 for the API
     ports:
-      - "8000:8000"
+      - "8080:8000"
     
     # Mount the current directory to /app in the container
     volumes:

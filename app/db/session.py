@@ -4,10 +4,9 @@ from sqlalchemy.orm import sessionmaker
 from app.core.config import settings
 
 # Database setup using SQLAlchemy with settings from the configuration file
-# echo is set to True for logging SQL statements, which can be helpful for debugging.
 engine = create_engine(
     settings.DATABASE_URL,
-    echo=True,
+    echo=False,
 )
 
 # Sessionmaker is configured for database interactions.

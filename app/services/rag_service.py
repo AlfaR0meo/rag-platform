@@ -1,16 +1,23 @@
 from sqlalchemy.orm import Session
 
 from app.models.user import User
+
 from app.services.llm_service import LLMService
 from app.services.search_service import SearchService
+
+from app.core.decorators import log_execution
 
 # Сервис для реализации RAG
 class RAGService:
 
     # Основной метод для обработки вопроса и генерации ответа
     @staticmethod
-    async def ask_question(db: Session, query: str, current_user: User):
-        
+    @log_execution("rag_request")
+    async def ask_question(
+        db: Session, 
+        query: str, 
+        current_user: User,
+    ):
         search_results = (
             SearchService.semantic_search(
                 db=db,

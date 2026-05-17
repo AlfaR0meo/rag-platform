@@ -6,6 +6,7 @@ from qdrant_client.models import (
     FieldCondition,
     Filter,
     MatchValue,
+    FilterSelector
 )
 from app.core.config import settings
 
@@ -94,3 +95,25 @@ class QdrantService:
         )
 
         return results
+    
+    # Метод для удаления всех чанков, связанных с определенным документом. Он принимает идентификатор документа и удаляет все точки в коллекции Qdrant, которые имеют payload с этим идентификатором документа. Это полезно для поддержания актуальности данных в Qdrant, особенно когда документ обновляется или удаляется
+    @classmethod
+    def delete_document_chunks(
+        cls,
+        document_id: int,
+    ):
+        cls.client.delete(
+            collection_name=cls.COLLECTION_NAME,
+            points_selector=FilterSelector(
+                filter=Filter(
+                    must=[
+                        FieldCondition(
+                            key="document_id",
+                            match=MatchValue(
+                                value=document_id
+                            ),
+                        )
+                    ]
+                )
+            ),
+        )
